@@ -39,7 +39,17 @@ class NotesProvider : ContentProvider() {
     override fun getType(uri: Uri): String? = throw UnsupportedSchemeException("Uri não implementada")
 
     override fun insert(uri: Uri, values: ContentValues?): Uri? {
-        if (mUriMatcher.match(uri) == NOTES)
+        if (mUriMatcher.match(uri) == NOTES) {
+            val db: SQLiteDatabase = dbHelper.writableDatabase
+            val id = db.insert(TABLE_NOTES, null, values)
+            val insertUri = Uri.withAppendedPath(BASE_URI, id.toString())
+            db.close()
+            //Avisa o Content Provider que houve alteração
+            context?.contentResolver?.notifyChange(uri, null)
+            return insertUri
+        } else{
+            throw UnsupportedSchemeException("Uri inválida para inserção!")
+        }
     }
 
     override fun query(
