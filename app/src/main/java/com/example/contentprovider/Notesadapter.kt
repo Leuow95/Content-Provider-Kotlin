@@ -10,15 +10,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.contentprovider.database.NotesDatabaseHelper.Companion.DESCRIPTION_NOTES
 import com.example.contentprovider.database.NotesDatabaseHelper.Companion.TITLE_NOTES
 
-class NotesAdapter(private val listener: NoteclickedListener): RecyclerView.Adapter<NotesViewHolder>(){
+class NotesAdapter(private val listener: NoteclickedListener) : RecyclerView.Adapter<NotesViewHolder>() {
 
     private var mCursor: Cursor? = null
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NotesViewHolder =
-            NotesViewHolder(LayoutInflater
-                    .from(parent.context)
-                    .inflate(R.layout.note_item, parent, false))
-
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NotesViewHolder = NotesViewHolder(
+        LayoutInflater
+            .from(parent.context)
+            .inflate(R.layout.note_item, parent, false)
+    )
 
 
     override fun onBindViewHolder(holder: NotesViewHolder, position: Int) {
@@ -26,24 +26,24 @@ class NotesAdapter(private val listener: NoteclickedListener): RecyclerView.Adap
 
         holder.noteTitle.text = mCursor?.getString(mCursor?.getColumnIndex(TITLE_NOTES) as Int)
         holder.noteDescription.text = mCursor?.getString(mCursor?.getColumnIndex(DESCRIPTION_NOTES) as Int)
-        holder.noteButtonRemove.setOnClickListener{
+        holder.noteButtonRemove.setOnClickListener {
             mCursor?.moveToPosition(position)
             listener.noteRemoveItem(mCursor)
             notifyDataSetChanged()
         }
 
-        holder.itemView.setOnClickListener{ listener.noteClickedItem(mCursor as Cursor) }
+        holder.itemView.setOnClickListener { listener.noteClickedItem(mCursor as Cursor) }
     }
 
     override fun getItemCount(): Int = if (mCursor != null) mCursor?.count as Int else 0
 
-    fun setCursor(newCursor: Cursor?){
+    fun setCursor(newCursor: Cursor?) {
         mCursor = newCursor
         notifyDataSetChanged()
     }
 }
 
-class NotesViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
+class NotesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     val noteTitle = itemView.findViewById(R.id.note_title) as TextView
     val noteDescription = itemView.findViewById(R.id.note_description) as TextView
     val noteButtonRemove = itemView.findViewById(R.id.note_button_remove) as Button

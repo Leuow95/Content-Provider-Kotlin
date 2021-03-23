@@ -15,7 +15,7 @@ import com.example.contentprovider.database.NotesDatabaseHelper.Companion.TABLE_
 class NotesProvider : ContentProvider() {
 
     private lateinit var mUriMatcher: UriMatcher
-    private lateinit var dbHelper : NotesDatabaseHelper
+    private lateinit var dbHelper: NotesDatabaseHelper
 
 
     override fun onCreate(): Boolean {
@@ -37,7 +37,8 @@ class NotesProvider : ContentProvider() {
             throw UnsupportedSchemeException("Uri inválida para exclusão")
         }
     }
-    override fun getType(uri: Uri): String? = throw UnsupportedSchemeException("Uri não implementada")
+    override fun getType(uri: Uri): String? =
+            throw UnsupportedSchemeException("Uri não implementada")
 
     override fun insert(uri: Uri, values: ContentValues?): Uri? {
         if (mUriMatcher.match(uri) == NOTES) {
@@ -65,7 +66,9 @@ class NotesProvider : ContentProvider() {
                 cursor
             }
             mUriMatcher.match(uri) == NOTES_BY_ID -> {
-                val db: SQLiteDatabase = dbHelper.writableDatabase
+                //if(::dbHelper.isInitialized){
+                    val db: SQLiteDatabase = dbHelper.writableDatabase
+                //}
                 val cursor = db.query(TABLE_NOTES, projection, "$_ID = ?", arrayOf(uri.lastPathSegment), null, null, sortOrder)
                 cursor.setNotificationUri((context as Context).contentResolver, uri)
                 cursor
