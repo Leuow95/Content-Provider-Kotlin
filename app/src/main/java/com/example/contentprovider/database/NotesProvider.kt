@@ -22,7 +22,7 @@ class NotesProvider : ContentProvider() {
         mUriMatcher = UriMatcher(UriMatcher.NO_MATCH)
         mUriMatcher.addURI(AUTHORITY, "notes", NOTES)
         mUriMatcher.addURI(AUTHORITY, "notes/#", NOTES_BY_ID)
-        if (context == null) {dbHelper = NotesDatabaseHelper(context as Context)}
+        if (context != null) {dbHelper = NotesDatabaseHelper(context as Context)}
         return true
     }
 
